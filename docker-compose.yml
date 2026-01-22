@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  dao-governance:
+    build: .
+    container_name: dao-governance
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npx hardhat test
