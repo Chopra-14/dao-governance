@@ -128,7 +128,7 @@ This project includes a **conceptual off-chain voting architecture**, commonly u
 
 ### Clone Repository
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/Chopra-14/dao-governance.git
 cd dao-governance
 ```
 
@@ -145,7 +145,7 @@ Create a file named **`.env`** in the project root using the following template:
 
 ```env
 # Private key of the deployer account (DO NOT share real keys)
-PRIVATE_KEY=
+PRIVATE_KEY="My private key"
 
 # RPC URL for blockchain network
 # For local development, Hardhat provides a built-in node
@@ -168,7 +168,7 @@ This project uses **Hardhat’s built-in local accounts**, so **no private key i
 Create a `.env` file if you plan to deploy to a testnet or mainnet:
 
 ```env
-PRIVATE_KEY=
+PRIVATE_KEY="MY PRIVATE KEY"
 RPC_URL=http://127.0.0.1:8545
 CHAIN_ID=31337
 ```
