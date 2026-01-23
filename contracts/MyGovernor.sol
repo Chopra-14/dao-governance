@@ -2,43 +2,73 @@
 pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/governance/Governor.sol";
-import "@openzeppelin/contracts/governance/extensions/GovernorCountingSimple.sol";
+import "@openzeppelin/contracts/governance/IGovernor.sol";
+import "@openzeppelin/contracts/governance/extensions/GovernorSettings.sol";
 import "@openzeppelin/contracts/governance/extensions/GovernorVotes.sol";
 import "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction.sol";
+import "@openzeppelin/contracts/governance/extensions/GovernorCountingSimple.sol";
 import "@openzeppelin/contracts/governance/extensions/GovernorTimelockControl.sol";
 
 contract MyGovernor is
     Governor,
-    GovernorCountingSimple,
+    GovernorSettings,
     GovernorVotes,
     GovernorVotesQuorumFraction,
+    GovernorCountingSimple,
     GovernorTimelockControl
 {
     constructor(
-        IVotes _token,
-        TimelockController _timelock
+        IVotes token,
+        TimelockController timelock
     )
         Governor("MyGovernor")
-        GovernorVotes(_token)
+        GovernorSettings(
+            1,  // voting delay
+            5,  // voting period
+            0   // proposal threshold
+        )
+        GovernorVotes(token)
         GovernorVotesQuorumFraction(4)
-        GovernorTimelockControl(_timelock)
+        GovernorTimelockControl(timelock)
     {}
 
-    /* ---------- DAO PARAMETERS ---------- */
+    // ---------------- Governor overrides ----------------
 
-    function votingDelay() public pure override returns (uint256) {
-        return 1;
+    function votingDelay()
+        public
+        view
+        override(IGovernor, GovernorSettings)
+        returns (uint256)
+    {
+        return super.votingDelay();
     }
 
-    function votingPeriod() public pure override returns (uint256) {
-        return 10;
+    function votingPeriod()
+        public
+        view
+        override(IGovernor, GovernorSettings)
+        returns (uint256)
+    {
+        return super.votingPeriod();
     }
 
-    function proposalThreshold() public pure override returns (uint256) {
-        return 0;
+    function proposalThreshold()
+        public
+        view
+        override(Governor, GovernorSettings)
+        returns (uint256)
+    {
+        return super.proposalThreshold();
     }
 
-    /* ---------- REQUIRED OVERRIDES ---------- */
+    function quorum(uint256 blockNumber)
+        public
+        view
+        override(IGovernor, GovernorVotesQuorumFraction)
+        returns (uint256)
+    {
+        return super.quorum(blockNumber);
+    }
 
     function state(uint256 proposalId)
         public
@@ -47,6 +77,19 @@ contract MyGovernor is
         returns (ProposalState)
     {
         return super.state(proposalId);
+    }
+
+    function propose(
+        address[] memory targets,
+        uint256[] memory values,
+        bytes[] memory calldatas,
+        string memory description
+    )
+        public
+        override(Governor, IGovernor)
+        returns (uint256)
+    {
+        return super.propose(targets, values, calldatas, description);
     }
 
     function _execute(
