@@ -266,6 +266,27 @@ dao-governance/
 | Security Practices       | ✅     |
 | Documentation            | ✅     |
 
+### 🚨 Emergency Pause (Multisig-Controlled)
+
+An emergency pause mechanism is implemented using OpenZeppelin’s Pausable module.
+The PAUSER_ROLE is assigned to the TimelockController.
+
+In production, the TimelockController would be owned by a multisignature wallet
+(e.g., Gnosis Safe), ensuring no single actor can halt governance.
+
+### 🔐 Advanced Security
+
+- Explicit ReentrancyGuard protection on execution
+- Snapshot-based voting prevents manipulation
+- Timelock-enforced execution delay
+- Role-based access control for critical actions
+
+### 🔁 Upgradeability
+
+The Governor is intentionally deployed as non-upgradeable to reduce governance
+attack surface. In production, the UUPS proxy pattern can be adopted without
+changing governance logic.
+
 
 ## 🏁 Conclusion
 
