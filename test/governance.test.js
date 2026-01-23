@@ -92,4 +92,12 @@ describe("DAO Governance Flow", function () {
     state = await governor.state(proposalId);
     expect(state).to.equal(7n);
   });
+  it("Covers governor helper functions for coverage", async function () {
+  const threshold = await governor.proposalThreshold();
+  expect(threshold).to.be.a("bigint");
+
+  const iface = await governor.supportsInterface("0x01ffc9a7"); // ERC165
+  expect(iface).to.equal(true);
+});
+
 });

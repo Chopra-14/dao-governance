@@ -132,6 +132,17 @@ git clone https://github.com/Chopra-14/dao-governance.git
 cd dao-governance
 ```
 
+---
+
+### Emergency Pause Mechanism
+
+The Governor includes an emergency pause/unpause mechanism implemented using OpenZeppelin Pausable.
+
+The PAUSER_ROLE is intended to be owned by the TimelockController, which in production would be controlled by a multisignature wallet (e.g., Gnosis Safe). This allows emergency halting of proposal creation without compromising decentralization.
+
+This design follows best practices used in production DAOs.
+
+
 # 🔑 Environment Configuration
 
 This project uses environment variables to securely manage sensitive configuration values.  
